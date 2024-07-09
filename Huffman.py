@@ -1,6 +1,7 @@
 import heapq
 from collections import Counter
 
+
 class Tree:
     def __init__(self, ch, freq, left=None, right=None):
         self.ch = ch
@@ -10,53 +11,73 @@ class Tree:
 
     def __lt__(self, other):
         return self.freq < other.freq
-    
-
-def build_tree(text):
-    counter = Counter(text)
-    pq = [Tree(ch, counter[ch]) for ch in counter]
-    heapq.heapify(pq)
-    while len(pq) > 1:
-        left = heapq.heappop(pq)
-        right = heapq.heappop(pq)
-        parent = Tree(None, left.freq+right.freq, left, right)
-        heapq.heappush(pq, parent)
-    return heapq.heappop(pq)
 
 
-def build_map(root):
-    def dfs(root, code, encoding_map):
-        if root.ch:
-            encoding_map[root.ch] = ''.join(code)
+class HuffmanCoding:
+    def __init__(self):
+        self.root = None
+        self.encoding_map = {}
+        self.encode_string = ""
+        self.text = None
+
+
+
+    def __build_tree(self, text):
+        counter = Counter(text)
+        pq = [Tree(ch, counter[ch]) for ch in counter]
+        heapq.heapify(pq)
+        while len(pq) > 1:
+            left = heapq.heappop(pq)
+            right = heapq.heappop(pq)
+            parent = Tree(None, left.freq + right.freq, left, right)
+            heapq.heappush(pq, parent)
+        self.root = heapq.heappop(pq)
+
+
+    def __build_map(self):
+        def dfs(node, code):
+            if node.ch:
+                self.encoding_map[node.ch] = ''.join(code)
+            else:
+                code.append('0')
+                dfs(node.left, code)
+                code.pop()
+                code.append('1')
+                dfs(node.right, code)
+                code.pop()
+        dfs(self.root, [])
+
+
+    def encode(self, text):
+        self.__build_tree(text)
+        self.__build_map()
+        self.text = text
+        self.encode_string = ''.join(self.encoding_map[ch] for ch in text)
+        print(self.encode_string)
+        return self.encode_string
+
+
+    def decode(self, encoded):
+        if self.root.ch:
+            return self.root.ch * len(encoded)
+        decoded = []
+        node = self.root
+        for bit in encoded:
+            if bit == "0":
+                node = node.left
+            else:
+                node = node.right
+            if node.ch:
+                decoded.append(node.ch)
+                node = self.root
+        decoded_text = ''.join(decoded)
+        if (decoded_text is self.text):
+            return decoded_text
         else:
-            code.append('0')
-            dfs(root.left, code, encoding_map)
-            code.pop()
-            code.append('1')
-            dfs(root.right, code, encoding_map)
-            code.pop()
-    encoding_map = {}
-    dfs(root, [], encoding_map)
-    return encoding_map
+            return None
 
-
-def encode(text):
-    root = build_tree(text)
-    encoding_map = build_map(root)
-    return ''.join([encoding_map[ch] for ch in text]), root
-
-
-def decode(encoded, root):
-    if root.ch:
-        return root.ch * len(encoded)
-    decoded = []
-    node = root
-    for bit in encoded:
-        if bit == "0":
-            node = node.left
+    def encode_with_same_tree(self, text):
+        if self.encoding_map:
+            return ''.join(self.encoding_map[ch] for ch in text)
         else:
-            node = node.right
-        if node.ch:
-            decoded.append(node.ch)
-            node = root
-    return ''.join(decoded)
+            return None
