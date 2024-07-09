@@ -1,0 +1,5 @@
+TEXT = "text.txt"
+ORIGINAL_IMG_PATH = "original_img.jpg"
+ENCODED_IMAGE_PATH = "encoded_image.png"
+CROPPED_IMAGE_PATH = "cropped_image.png"
+REGEX_PATTERN = "\d{2}"
