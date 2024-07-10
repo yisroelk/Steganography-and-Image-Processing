@@ -1,6 +1,7 @@
 import heapq
 from collections import Counter
 
+
 class Tree:
     """
     A class representing a node in the Huffman tree.
@@ -17,6 +18,7 @@ class Tree:
         self.freq = freq
         self.left = left
         self.right = right
+
 
     def __lt__(self, other):
         """
@@ -48,6 +50,7 @@ class HuffmanCoding:
         self.encode_string = ""
         self.text = None
 
+
     def __build_tree(self, text):
         """
         Build the Huffman tree based on the frequency of characters in the text.
@@ -58,15 +61,14 @@ class HuffmanCoding:
         counter = Counter(text)  # Count the frequency of each character
         pq = [Tree(ch, counter[ch]) for ch in counter]  # Create a priority queue of Tree nodes
         heapq.heapify(pq)  # Transform the list into a heap
-        
         # Build the Huffman tree
         while len(pq) > 1:
             left = heapq.heappop(pq)
             right = heapq.heappop(pq)
             parent = Tree(None, left.freq + right.freq, left, right)
             heapq.heappush(pq, parent)
-        
         self.root = heapq.heappop(pq)  # The root of the tree
+
 
     def __build_map(self):
         """
@@ -91,8 +93,8 @@ class HuffmanCoding:
                 code.append('1')
                 dfs(node.right, code)
                 code.pop()
-        
         dfs(self.root, [])  # Start DFS from the root of the tree
+
 
     def encode(self, text):
         """
@@ -105,12 +107,15 @@ class HuffmanCoding:
             str: The encoded string.
         """
         self.__build_tree(text)  # Build the Huffman tree
+        print(self.__build_tree)
         self.__build_map()  # Build the encoding map
+        print(self.__build_map)
         self.text = text
         # Create the encoded string using the encoding map
         self.encode_string = ''.join(self.encoding_map[ch] for ch in text)  # Encode the text
         print(self.encode_string)
         return self.encode_string
+
 
     def decode(self, encoded):
         """
@@ -140,6 +145,7 @@ class HuffmanCoding:
         # Verify if the decoded text matches the original text
         return decoded_text if decoded_text == self.text else None
 
+
     def encode_with_same_tree(self, text):
         """
         Encode the text using the existing Huffman tree.
@@ -154,3 +160,5 @@ class HuffmanCoding:
             return ''.join(self.encoding_map[ch] for ch in text)
         else:
             return None
+        
+

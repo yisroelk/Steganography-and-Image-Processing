@@ -2,6 +2,7 @@ from Steganography import Steganography
 from ImageCrop import Crop_img
 from settings import *
 
+
 # Instantiate Steganography object and hide text in an image
 steganography = Steganography()
 steganography.hide_text_in_image(TEXT, ORIGINAL_IMG_PATH, ENCODED_IMAGE_PATH)

@@ -1,6 +1,7 @@
 import re
 from PIL import Image
 
+
 class Crop_img:
     """
     A class to crop parts of an image based on encoded text matches.
@@ -93,7 +94,7 @@ class Crop_img:
                 self.indexes.append(((0, end_i[1]), end_i))
         return self.indexes
     
-    
+
     def crop(self, image_path, regex_pattern, output_image_path, huffman_obj):
         """
         Crop the image based on matches of the regex pattern in the encoded text.

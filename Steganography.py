@@ -1,6 +1,7 @@
 import cv2
 from Huffman import HuffmanCoding
 
+
 class Steganography:
     """
     A class for performing steganography by hiding text within an image using Huffman coding.
@@ -26,6 +27,7 @@ class Steganography:
         self.root = None
         self.full_string = ""
 
+
     def __load_text(self, text_path):
         """
         Load text from a file.
@@ -41,6 +43,7 @@ class Steganography:
         except Exception as e:
             print(f"An error occurred: {e}")
 
+
     def __encode_text(self):
         """
         Encode the text using Huffman coding and prepare the binary string for hiding in the image.
@@ -54,6 +57,7 @@ class Steganography:
         string_length_in_bin32bit = string_length_in_bin.zfill(32)
         # Concatenate the length and the encoded text
         self.full_string = string_length_in_bin32bit + self.encoded_text
+
 
     def __load_image(self, image_path):
         """
@@ -69,6 +73,7 @@ class Steganography:
             self.height, self.width = self.image.shape[:2]
         except FileNotFoundError:
             print(f"File '{image_path}' not found.")
+
 
     def hide_text_in_image(self, text_path, image_path, output_image_path):
         """
@@ -86,7 +91,7 @@ class Steganography:
         counter = 0
         len_full_string = len(self.full_string)
         # Check if the image has enough pixels to hide the text
-        if self.height * self.width * 3 > len_full_string:
+        if self.height * self.width * 3 >= len_full_string:
             for i in range(self.height):
                 for j in range(self.width):
                     for rgb in range(3):
@@ -105,6 +110,7 @@ class Steganography:
         else:
             return None
 
+
     def __save_encoded_image(self, output_image_path):
         """
         Save the image with the hidden text to a file.
@@ -113,6 +119,7 @@ class Steganography:
             output_image_path (str): The path where the output image will be saved.
         """
         cv2.imwrite(output_image_path, self.image)
+
 
     def __find_string_length(self, image):
         """
@@ -136,6 +143,7 @@ class Steganography:
                         # Convert the binary string to an integer
                         return int(string, 2)
 
+
     def __extract_code_from_image(self, image, len_code):
         """
         Extract the binary string from the image.
@@ -158,6 +166,7 @@ class Steganography:
                     else:
                         return string
 
+
     def extract_text_from_image(self, image_path):
         """
         Extract and decode the hidden text from the specified image.
@@ -179,6 +188,7 @@ class Steganography:
         # Decode the text using Huffman coding
         decoded_text = self.huffman.decode(encoded_text)
         return decoded_text
+
 
     def return_huffman_obj(self):
         """
